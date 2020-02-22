@@ -6,17 +6,19 @@ class Couple:
             print("Erreur Parcours est None")
         self.Etudiant=Etudiant
         self.Parcours=Parcours
-        self.Etudiant.listeAccepte.append(Parcours)
-        self.Parcours.listeAccepte.append(Etudiant)
+        self.Etudiant.ajoutAccepte(Parcours)
+        self.Parcours.ajoutAccepte(Etudiant)
     def __str__(self):
         return "("+str(self.Etudiant)+","+str(self.Parcours)+")"
     def divorce(self):
-        print(self.Etudiant,len(self.Etudiant.listeAccepte))
+        #print(self.Etudiant,len(self.Etudiant.listeAccepte))
         self.Etudiant.listeAccepte.remove(self.Parcours)
-        print(self.Etudiant,len(self.Etudiant.listeAccepte))
-        print(self.Parcours,len(self.Parcours.listeAccepte))
+        self.Etudiant.nombreAccepte-=1
+        #print(self.Etudiant,len(self.Etudiant.listeAccepte))
+        #print(self.Parcours,len(self.Parcours.listeAccepte))
         self.Parcours.listeAccepte.remove(self.Etudiant)
-        print(self.Parcours,len(self.Parcours.listeAccepte))
+        self.Parcours.nombreAccepte-=1
+        #print(self.Parcours,len(self.Parcours.listeAccepte))
 
 class ListeCouple:
     def __init__(self,liste):
@@ -25,7 +27,7 @@ class ListeCouple:
     def __str__(self):
         a=""
         for Couple in self.listeCouple:
-            a=a+" "+str(Couple)
+            a=a+str(Couple)+" "
         return a
     def findCouple(self,Etudiant,Parcours):
         """

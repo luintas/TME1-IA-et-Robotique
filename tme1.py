@@ -1,6 +1,6 @@
 from Couple import *
 from Choice import *
-from time import sleep
+from time import *
 """Definition des classes utilisées"""
 #NOTE on garde la liste des objet plutot que la liste en String car elle prend moins de place en mémoire et permert un acces plus rapide
 
@@ -15,7 +15,7 @@ def filetoMatSpe(File):
     f=open(File,"r")
     lines = f.read().splitlines()
     capacite=lines[1].split()
-    print(capacite)
+    #print(capacite)
     listSpe=[]
     for indicelignecourante in range(2,len(lines),1):
         tmpPref=lines[indicelignecourante].split()[1:]
@@ -76,35 +76,29 @@ def createMat():
 #Fonctions demandées dans la suite du projet
 def GaleShapley(tabEtudiant,tabParcours):
     listeCouple=ListeCouple([])
-    tabLibre=[]
-    for Etu in tabEtudiant:
-        if(Etu.free()):
-            tabLibre.append(Etu)
-            print(Etu)
-    while(len(tabLibre)>0):
-        print(len(tabLibre))
-        print(listeCouple)
+    tabLibre=tabEtudiant
+    tailletabLibre=len(tabLibre)
+    while(tailletabLibre>0):
         tmpLibre=tabLibre.pop()
+        tailletabLibre-=1
         for Volonte in tmpLibre.preference:#TODO Voir pourquoi des gens partent sans avoir trouvé d'affectation
-            if(tmpLibre.nom=="Etu32"):
-                print()
-            if(not tmpLibre.free()):
+            if(not tmpLibre.free()):#Permet de savoir si l'on est toujours libre si on ne l'est pas on ne cherche plus d'Etudiant/de Master
                 break
             if Volonte.free() :
                 listeCouple.append(Couple(tmpLibre,Volonte))
             else:
                 (reponse,rejete)=Volonte.prefere(tmpLibre)
-                if reponse :#TODO Trouver un moyen de faire fonctionner le divorce pour Gale Shapley
+                if reponse :
                     tmpDivorce=listeCouple.findCouple(Volonte,rejete)
                     if tmpDivorce == None:
                         print("ERROR",sys.stderror)
                     tmpDivorce.divorce()
                     listeCouple.remove(tmpDivorce)
-                    print(rejete,len(tabLibre))
                     tabLibre.append(rejete)
-                    print(rejete,len(tabLibre))
-                    sleep(1)
+                    tailletabLibre+=1
                     listeCouple.append(Couple(tmpLibre,Volonte))
+        #for Spe in tabParcours:
+        #    Spe.CheckValid()
                     
     return listeCouple
 
